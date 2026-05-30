@@ -1,24 +1,31 @@
 /*
  * Clavier 左手側オーバーレイ
- * - BLE Central（ホスト接続側）
- * - PMW3610 トラックボール搭載 (4行×5列, 合計20キー)
+ * - BLE Central（親機：PC接続・無線マスター）
+ * - 4行×5列 (合計20キー)
  *
- * キーマトリクス ピンアサイン:
- *   Row0: P0.03  Row1: P0.28  Row2: P0.29  Row3: P1.11
- *   Col0: P0.10  Col1: P1.12  Col2: P1.13  Col3: P1.14  Col4: P1.15
- *
- * PMW3610 ピンアサイン:
- *   SCLK:   P0.05  SDIO: P0.04  CS: P0.09  MOTION: P0.02
+ * 💡 このファイルの極意：
+ * ────────────────────────────────────────────────────────────────────────
+ * 1. zmk,kscan = &kscan0; を chosen ノードで宣言することで、このファイルが
+ * 左手側のキースキャン設定であることをマイコンに伝えます。
+ * 2. 下記のピンアサインは、左手側の基板配線と1対1で対応しています。
+ * 3. SPI設定（トラックボール用）は、親機である左手側でのみ有効化します。
+ * ────────────────────────────────────────────────────────────────────────
  */
 
 #include "clavier.dtsi"
 
 / {
+    /* ⚡【超重要】この設定ファイルは「左手側」のキースキャン（kscan0）であるとZMKに宣言 */
+    chosen {
+        zmk,kscan = &kscan0;
+    };
+
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         wakeup-source;
         diode-direction = "col2row";
 
+        /* 左手側の行（Row）ピンアサイン */
         row-gpios
             = <&gpio0 3  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* Row0: P0.03 */
             , <&gpio0 28 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* Row1: P0.28 */
@@ -26,6 +33,7 @@
             , <&gpio1 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* Row3: P1.11 */
             ;
 
+        /* 左手側の列（Col）ピンアサイン */
         col-gpios
             = <&gpio0 10 GPIO_ACTIVE_HIGH>   /* Col0: P0.10 */
             , <&gpio1 12 GPIO_ACTIVE_HIGH>   /* Col1: P1.12 */
@@ -36,12 +44,13 @@
     };
 };
 
+/* トラックボール制御用のSPI通信設定（左手親機のみ有効） */
 &pinctrl {
     spi2_default: spi2_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,   /* SCLK: P0.05 */
                     <NRF_PSEL(SPIM_MOSI, 0, 4)>,   /* SDIO: P0.04 */
-                    <NRF_PSEL(SPIM_MISO, 0, 4)>;   /* SDIO: P0.04 (同一ピン・双方向) */
+                    <NRF_PSEL(SPIM_MISO, 0, 4)>;   /* SDIO: P0.04 */
         };
     };
 
@@ -68,11 +77,6 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;   /* MOTION: P0.02 */
-
-        /*
-         * automouse-layer: トラックボール動作時に自動有効化するレイヤー
-         * Layer 3 (MOUSE) を指定
-         */
         automouse-layer = <3>;
     };
 };
@@ -83,13 +87,7 @@
     };
 };
 
-/*
- * UART0 を無効化してピンを GPIO として解放する。
- *   P1.11 (Row3) は XIAO の UART TX ピン
- *   P1.12 (Col1) は XIAO の UART RX ピン
- * UART ドライバがこれらを占有すると GPIO キースキャンに干渉する。
- * ZMK は USB CDC ACM でログ出力するため UART は不要。
- */
+/* UARTピンの解放：GPIOとして使うため完全に無効化 */
 &uart0 {
     status = "disabled";
 };
