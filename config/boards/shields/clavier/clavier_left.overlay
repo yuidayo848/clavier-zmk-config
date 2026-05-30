@@ -82,3 +82,14 @@
         zmk,pointing = &trackball;
     };
 };
+
+/*
+ * UART0 を無効化してピンを GPIO として解放する。
+ *   P1.11 (Row3) は XIAO の UART TX ピン
+ *   P1.12 (Col1) は XIAO の UART RX ピン
+ * UART ドライバがこれらを占有すると GPIO キースキャンに干渉する。
+ * ZMK は USB CDC ACM でログ出力するため UART は不要。
+ */
+&uart0 {
+    status = "disabled";
+};
