@@ -1,0 +1,5 @@
+config SHIELD_CLAVIER_LEFT
+    def_bool $(shields_list_contains,clavier_left)
+
+config SHIELD_CLAVIER_RIGHT
+    def_bool $(shields_list_contains,clavier_right)

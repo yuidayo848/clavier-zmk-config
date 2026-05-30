@@ -1,0 +1,26 @@
+if SHIELD_CLAVIER_LEFT || SHIELD_CLAVIER_RIGHT
+
+config ZMK_KEYBOARD_NAME
+    default "Clavier"
+
+config ZMK_SPLIT
+    default y
+
+if SHIELD_CLAVIER_LEFT
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+config ZMK_POINTING
+    default y
+
+config ZMK_POINTING_SMOOTH_SCROLLING
+    default y
+
+endif # SHIELD_CLAVIER_LEFT
+
+if SHIELD_CLAVIER_RIGHT
+
+endif # SHIELD_CLAVIER_RIGHT
+
+endif # SHIELD_CLAVIER_LEFT || SHIELD_CLAVIER_RIGHT
