@@ -1,6 +1,6 @@
 ---
 include:
-  - board: seeeduino_xiao_ble
+  - board: seeeduino_xiao_ble/nrf52840
     shield: clavier_left
-  - board: seeeduino_xiao_ble
+  - board: seeeduino_xiao_ble/nrf52840
     shield: clavier_right
