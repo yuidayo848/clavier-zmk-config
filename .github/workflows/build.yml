@@ -46,7 +46,7 @@ jobs:
 
       - name: Build ${{ matrix.shield }}
         run: |
-          west build -b ${{ matrix.board }} -d build \
+          west build -s zmk/app -b ${{ matrix.board }} -d build \
             -- -DZMK_CONFIG="${GITHUB_WORKSPACE}/config" \
                -DSHIELD=${{ matrix.shield }}
 
