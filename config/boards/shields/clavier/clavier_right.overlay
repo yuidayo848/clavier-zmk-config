@@ -10,6 +10,7 @@
  * 注意: 左手側と異なる独自のピンアサイン
  *   P0.28 は未接続 (左側ではRow1だが右側では未使用)
  *   P0.04, P0.05 は左側PMW3610用SPI信号だが右側ではCol4, Row2として使用
+ *   col-offset = <5> により右手側ローカル Col0-5 → 結合マトリクス Col5-10 に変換
  */
 
 #include "clavier.dtsi"
@@ -19,6 +20,7 @@
         compatible = "zmk,kscan-gpio-matrix";
         wakeup-source;
         diode-direction = "col2row";
+        col-offset = <5>;
 
         row-gpios
             = <&gpio0 3  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* Row0: P0.03 */
@@ -28,12 +30,18 @@
             ;
 
         col-gpios
-            = <&gpio1 15 GPIO_ACTIVE_HIGH>   /* Col0: P1.15 */
-            , <&gpio1 14 GPIO_ACTIVE_HIGH>   /* Col1: P1.14 */
-            , <&gpio1 12 GPIO_ACTIVE_HIGH>   /* Col2: P1.12 */
-            , <&gpio1 13 GPIO_ACTIVE_HIGH>   /* Col3: P1.13 */
-            , <&gpio0 4  GPIO_ACTIVE_HIGH>   /* Col4: P0.04 */
-            , <&gpio0 2  GPIO_ACTIVE_HIGH>   /* Col5: P0.02 */
+            = <&gpio1 15 GPIO_ACTIVE_HIGH>   /* Col0: P1.15 → 結合Col5 */
+            , <&gpio1 14 GPIO_ACTIVE_HIGH>   /* Col1: P1.14 → 結合Col6 */
+            , <&gpio1 12 GPIO_ACTIVE_HIGH>   /* Col2: P1.12 → 結合Col7 */
+            , <&gpio1 13 GPIO_ACTIVE_HIGH>   /* Col3: P1.13 → 結合Col8 */
+            , <&gpio0 4  GPIO_ACTIVE_HIGH>   /* Col4: P0.04 → 結合Col9 */
+            , <&gpio0 2  GPIO_ACTIVE_HIGH>   /* Col5: P0.02 → 結合Col10 */
             ;
     };
+};
+
+/* 左手側のトラックボールSPI2ピン(P0.04, P0.05, P0.02)を
+ * 右手側ではGPIOキーマトリクスとして使用するため、SPI2を明示的に無効化 */
+&spi2 {
+    status = "disabled";
 };
