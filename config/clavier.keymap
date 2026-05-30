@@ -64,8 +64,8 @@
 
             /* ─── 右手側 (位置 20 〜 43) ─── */
             /* 右手側は回路図と物理配置が素直な格子状に一致しています（結合Col5〜10） */
-            /* Row0: 右上段 (Y, U, I, O, P, [ ) */
-            &kp Y      &kp U      &kp I      &kp O      &kp P      &kp LBKT
+            /* Row0: 右上段 (Y, P, I, O, P, [ ) */
+            &kp Y      &kp P      &kp I      &kp O      &kp P      &kp LBKT
 
             /* Row1: 右中段 (H, J, K, L, ;, ' ) */
             &kp H      &kp J      &kp K      &kp L      &kp SEMI   &kp SQT
@@ -73,8 +73,8 @@
             /* Row2: 右下段 (N, M, ,, ., /, ] ) */
             &kp N      &kp M      &kp COMMA  &kp DOT    &kp FSLH   &kp RBKT
 
-            /* Row3: 右親指・機能キー列 (SPC, RSE, ENT, BSPC, DEL, \ ) */
-            &kp SPACE  &mo RAISE  &kp RET    &kp BSPC   &kp DEL    &kp BSLH
+            /* Row3: 右親指・機能キー列 (SPC, FSLH, ENT, BSPC, DEL, \ ) */
+            &kp SPACE  &kp FSLH  &kp RET    &kp BSPC   &kp DEL    &kp BSLH
             >;
         };
 
