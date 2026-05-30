@@ -12,7 +12,6 @@
  */
 
 #include "clavier.dtsi"
-#include <dt-bindings/zmk/pointing.h>
 
 / {
     kscan0: kscan {
