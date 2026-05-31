@@ -3,11 +3,10 @@
  *
  * 💡 このファイルの読み方・メンテナンスの極意：
  * ────────────────────────────────────────────────────────────────────────
- * 1. 「clavier.dtsi」で定義した、回路図通りの格子状住所（Row0〜3, Col0〜10）を使用します。
- * 2. 物理的なキー配置（上段・中段・下段・親指）との対応関係は、レイヤー0のコメントにすべて
- * 書き起こしてあります。
- * 3. 新たに追加したレイヤー4とレイヤー5を含め、すべてのレイヤー（0〜5）の枠順（マトリクス順）は
- * 完全に統一されています。配列をカスタムする際は、縦の並びを揃えて書き換えてください。
+ * 「clavier.dtsi」で定義した、回路図通りの格子状住所（Row0〜3, Col0〜10）を使用します。
+ * 物理的なキー配置（上段・中段・下段・親指）とは異なるため注意してください。
+ * すべてのレイヤー（0〜5）の枠順（マトリクス順）は完全に統一されています。
+ * 配列をカスタムする際は、必ず縦の並び（位置）を揃えて書き換えてください。
  * ────────────────────────────────────────────────────────────────────────
  */
 
@@ -21,8 +20,8 @@
 #define LOWER   1  // 1: 数字・記号
 #define RAISE   2  // 2: ナビゲーション・BT・Fキー
 #define MOUSE   3  // 3: トラックボール自動有効化（現状透過設定）
-#define LAYER4  4  // 4: 拡張レイヤーA（例：メディア・マクロ用など自由にカスタム可能）
-#define LAYER5  5  // 5: 拡張レイヤーB（例：システム操作・ゲーム用など自由にカスタム可能）
+#define LAYER4  4  // 4: 拡張レイヤーA
+#define LAYER5  5  // 5: 拡張レイヤーB
 
 / {
     keymap {
@@ -34,20 +33,17 @@
 
         default_layer {
             bindings = <
-&kp LCTRL  &kp Q     &kp W      &kp R     &kp T
-&kp LGUI   &kp A     &kp S      &kp F     &kp G
-&kp LALT   &kp Z     &kp E      &kp V     &kp B
-&kp X      &kp C     &kp D      &kp P     &kp SPACE
+&kp ESC    &kp Q     &kp W      &kp R     &kp T
+&kp LSHFT  &kp A     &kp E      &kp F     &kp G
+&kp LCTRL  &kp S     &kp D      &kp V     &kp B
+&kp Z      &kp X     &kp C      &kp INT5  &kp SPACE
 
 
 
-
-
-
-&kp Y      &kp P     &kp I      &kp O     &kp P      &kp LBKT
-&kp H      &kp J     &kp K      &kp L     &kp SEMI   &kp SQT
-&kp N      &kp M     &kp COMMA  &kp DOT   &kp FSLH   &kp RBKT
-&kp SPACE  &kp FSLH  &kp RET    &kp BSPC  &kp DEL    &kp BSLH
+&kp Y      &kp U     &kp I      &kp O      &kp EQUAL   &kp TAB
+&kp H      &kp J     &kp K      &kp L      &kp P       &kp ENTER
+&kp N      &kp M     &kp COMMA  &kp FSLH   &kp DOT     &kp LALT
+&kp INT4   &kp BSPC  &kp DEL    &kp PSCRN  &kp 1       &kp 2
             >;
         };
 
@@ -59,9 +55,6 @@
 &kp TAB    &kp EXCL   &kp AT     &kp DLLR  &kp PRCNT
 &kp CAPS   &kp GRAVE  &kp N3     &none     &none
 &kp TILDE  &none      &kp HASH   &trans    &trans
-
-
-
 
 
 
@@ -80,10 +73,6 @@
 &kp TAB       &kp F11       &kp F12  &none      &none
 &kp CAPS      &bt BT_SEL 0  &kp F3   &none      &none
 &bt BT_SEL 1  &bt BT_SEL 2  &kp INS  &trans     &trans
-
-
-
-
 
 
 &kp F6        &kp F7        &kp F8   &kp F9     &kp F10    &none
@@ -105,10 +94,6 @@
 &trans  &trans  &trans  &trans  &trans
 
 
-
-
-
-
 &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans
@@ -116,9 +101,8 @@
             >;
         };
 
-        /* ＝＝＝＝＝＝＝＝＝＝ Layer 4: LAYER4 (拡張用レイヤーA) ＝＝＝＝＝＝＝＝＝＝
-         * 追加された5つ目のレイヤーです。現状はすべて &trans（下のレイヤーを透過）にしています。
-         * ボリューム調整やメディア再生、マクロなどを割り当てるのに便利です。
+        /* ＝＝＝＝＝＝＝＝＝＝ Layer 4: 拡張用レイヤーA ＝＝＝＝＝＝＝＝＝＝
+         * 任意のレイヤーです。
          */
 
         layer4_layer {
@@ -129,10 +113,6 @@
 &trans  &trans  &trans  &trans  &trans
 
 
-
-
-
-
 &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans
@@ -140,9 +120,8 @@
             >;
         };
 
-        /* ＝＝＝＝＝＝＝＝＝＝ Layer 5: LAYER5 (拡張用レイヤーB) ＝＝＝＝＝＝＝＝＝＝
-         * 追加された6つ目のレイヤーです。現状はすべて &trans にしています。
-         * 将来的にゲーム用の固定配置や、特定のアプリケーション専用ショートカットを埋め込む際に活用してください。
+        /* ＝＝＝＝＝＝＝＝＝＝ Layer 5: 拡張用レイヤーB ＝＝＝＝＝＝＝＝＝＝
+         * 任意のレイヤーです。
          */
 
         layer5_layer {
@@ -151,10 +130,6 @@
 &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans
-
-
-
-
 
 
 &trans  &trans  &trans  &trans  &trans  &trans
