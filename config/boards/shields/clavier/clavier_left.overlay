@@ -45,18 +45,19 @@
 
 /* トラックボール制御のためのSPIピン設定 */
 &pinctrl {
+    /* * 💡 3線式SPI通信の設定（MOSIピンをデータ線として使用）
+     * 回路図に合わせてMISOの記述を削除し、MOSIにSDIO(P0.04)を割り当てます
+     */
     spi2_default: spi2_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                    <NRF_PSEL(SPIM_MISO, 0, 4)>;
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;
         };
     };
     spi2_sleep: spi2_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                    <NRF_PSEL(SPIM_MISO, 0, 4)>;
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;
             low-power-enable;
         };
     };
@@ -68,12 +69,15 @@
     pinctrl-0 = <&spi2_default>;
     pinctrl-1 = <&spi2_sleep>;
     pinctrl-names = "default", "sleep";
+    
+    /* CSピン: 回路図のP0.09に対応 */
     cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
 
     trackball: pmw3610@0 {
         compatible = "pixart,pmw3610";
         reg = <0>;
         spi-max-frequency = <2000000>;
+        /* IRQピン: 回路図のP0.02に対応 */
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         automouse-layer = <3>;
     };
