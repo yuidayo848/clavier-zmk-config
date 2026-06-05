@@ -13,9 +13,11 @@ config ZMK_SPLIT_ROLE_CENTRAL
 
 # --- トラックボール（PMW3610）用設定 ---
 config ZMK_PMW3610
+    bool
     default y
 
 config ZMK_PMW3610_TRIGGER_GLOBAL_THREAD
+    bool
     default y
 # ------------------------------------
 
