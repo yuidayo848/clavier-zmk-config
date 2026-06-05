@@ -1,19 +1,6 @@
-/*
- * Clavier 左手側オーバーレイ
- * - BLE Central（親機：PC接続・無線マスター）
- * - 4行×5列 (合計20キー)
- * 💡 このファイルの極意：
- * ────────────────────────────────────────────────────────────────────────
- * 1. zmk,kscan = &kscan0; を chosen ノードで宣言することで、このファイルが
- * 左手側のキースキャン設定であることをマイコンに伝えます。
- * 2. 下記のピンアサインは、左手側の基板配線と1対1で対応しています。
- * 3. SPI設定（トラックボール用）は、親機である左手側でのみ有効化します。
- * ────────────────────────────────────────────────────────────────────────
- */
 #include "clavier.dtsi"
 
 / {
-    /* ⚡ 親機（左手）の役割宣言 */
     chosen {
         zmk,kscan = &kscan0;
         zmk,pointing = &trackball;
@@ -23,40 +10,30 @@
         compatible = "zmk,kscan-gpio-matrix";
         wakeup-source;
         diode-direction = "col2row";
-
-        /* 回路図準拠のRowピンアサイン */
         row-gpios
-            = <&gpio0 3  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* Row0: P0.03 */
-            , <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* Row1: P0.29 */
-            , <&gpio0 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* Row2: P0.10 */
-            , <&gpio1 12 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   /* Row3: P1.12 */
-            ;
-
-        /* 回路図準拠のColピンアサイン */
+            = <&gpio0 3  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio1 12 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
         col-gpios
-            = <&gpio1 15 GPIO_ACTIVE_HIGH>   /* Col0: P1.15 */
-            , <&gpio1 11 GPIO_ACTIVE_HIGH>   /* Col1: P1.11 */
-            , <&gpio1 14 GPIO_ACTIVE_HIGH>   /* Col2: P1.14 */
-            , <&gpio1 13 GPIO_ACTIVE_HIGH>   /* Col3: P1.13 */
-            , <&gpio0 28 GPIO_ACTIVE_HIGH>   /* Col4: P0.28 */
-            ;
+            = <&gpio1 15 GPIO_ACTIVE_HIGH>
+            , <&gpio1 11 GPIO_ACTIVE_HIGH>
+            , <&gpio1 14 GPIO_ACTIVE_HIGH>
+            , <&gpio1 13 GPIO_ACTIVE_HIGH>
+            , <&gpio0 28 GPIO_ACTIVE_HIGH>;
     };
 };
 
-/* トラックボール制御のためのSPIピン設定 */
 &pinctrl {
-    /* * 💡 3線式SPI通信の設定（MOSIピンをデータ線として使用）
-     * 回路図に合わせてMISOの記述を削除し、MOSIにSDIO(P0.04)を割り当てます
-     */
     spi2_default: spi2_default {
         group1 {
-            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
+            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
                     <NRF_PSEL(SPIM_MOSI, 0, 4)>;
         };
     };
     spi2_sleep: spi2_sleep {
         group1 {
-            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
+            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
                     <NRF_PSEL(SPIM_MOSI, 0, 4)>;
             low-power-enable;
         };
@@ -69,21 +46,17 @@
     pinctrl-0 = <&spi2_default>;
     pinctrl-1 = <&spi2_sleep>;
     pinctrl-names = "default", "sleep";
-    
-    /* CSピン: 回路図のP0.09に対応 */
     cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
 
     trackball: pmw3610@0 {
-        compatible = "pixart,pmw3610";
+        compatible = "zmk,pmw3610";
         reg = <0>;
         spi-max-frequency = <2000000>;
-        /* IRQピン: 回路図のP0.02に対応 */
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         automouse-layer = <3>;
     };
 };
 
-/* GPIOとしてピンを使用するため不要な機能を無効化 */
 &uart0 {
     status = "disabled";
 };
