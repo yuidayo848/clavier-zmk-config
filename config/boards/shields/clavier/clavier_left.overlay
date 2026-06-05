@@ -16,9 +16,7 @@
     /* ⚡ 親機（左手）の役割宣言 */
     chosen {
         zmk,kscan = &kscan0;
-        /* SPI無効化テストのため一時的にコメントアウト
-        zmk,pointing = &trackball; 
-        */
+        zmk,pointing = &trackball;
     };
 
     kscan0: kscan {
@@ -66,8 +64,7 @@
 
 &spi2 {
     compatible = "nordic,nrf-spim";
-    /* SPI無効化テストのため status を "disabled" に設定 */
-    status = "disabled";
+    status = "okay";
     pinctrl-0 = <&spi2_default>;
     pinctrl-1 = <&spi2_sleep>;
     pinctrl-names = "default", "sleep";
