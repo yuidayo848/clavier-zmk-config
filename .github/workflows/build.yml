@@ -1,6 +1,5 @@
 name: Build ZMK Firmware
 
-
 on:
   push:
   pull_request:
