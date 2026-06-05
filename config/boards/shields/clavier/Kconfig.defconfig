@@ -11,6 +11,14 @@ if SHIELD_CLAVIER_LEFT
 config ZMK_SPLIT_ROLE_CENTRAL
     default y
 
+# --- トラックボール（PMW3610）用設定 ---
+config ZMK_PMW3610
+    default y
+
+config ZMK_PMW3610_TRIGGER_GLOBAL_THREAD
+    default y
+# ------------------------------------
+
 endif # SHIELD_CLAVIER_LEFT
 
 endif # SHIELD_CLAVIER_LEFT || SHIELD_CLAVIER_RIGHT
